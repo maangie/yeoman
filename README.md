@@ -1,71 +1,68 @@
 # yeoman
 
-[yo angular generator](https://github.com/yeoman/generator-angular) v0.16.0 で生成した AngularJS 1.x アプリケーションの雛形です。
+Angular 22 で作られたシンプルなアプリケーションです。もとは [yo angular generator](https://github.com/yeoman/generator-angular) v0.16.0 で生成した AngularJS 1.x の雛形でしたが、Angular 22 に移行しました。
 
 ## 技術スタック
 
 | 用途 | 使用技術 |
 |---|---|
-| フレームワーク | AngularJS 1.4 系（`ngRoute` / `ngAnimate` / `ngCookies` / `ngResource` / `ngSanitize` / `ngTouch`） |
-| UI / スタイル | Bootstrap 3（`bootstrap-sass-official`）、SCSS（Compass） |
-| フロントエンドのパッケージ管理 | Bower |
-| ビルド | Grunt |
-| テスト | Karma + Jasmine + PhantomJS |
-| Lint | JSHint、JSCS |
+| フレームワーク | Angular 22（スタンドアロンコンポーネント、`@angular/router`） |
+| 言語 | TypeScript |
+| スタイル | Bootstrap 5、SCSS |
+| ビルド・開発サーバー | Angular CLI（`@angular/build`） |
+| テスト | Vitest + jsdom |
+| Lint | ESLint（angular-eslint） |
+
+## 必要な環境
+
+Node.js 22.22.3 以上、24.15.0 以上、または 26 以上（Angular CLI 22 の要件）。
 
 ## ディレクトリ構成
 
 ```
-app/
+src/
   index.html               エントリーポイント
-  scripts/app.js           メインモジュール yeomanApp とルーティング設定
-  scripts/controllers/     コントローラー（MainCtrl / AboutCtrl）
-  views/                   ビューテンプレート（main.html / about.html）
-  styles/main.scss         スタイルシート
-  images/                  画像
-test/
-  karma.conf.js            Karma の設定
-  spec/controllers/        コントローラーのユニットテスト
-Gruntfile.js               Grunt のタスク定義
-bower.json                 フロントエンドの依存パッケージ
-package.json               開発用の依存パッケージ
+  main.ts                  アプリの起動処理
+  styles.scss              グローバルなスタイル
+  app/
+    app.ts, app.html       ルートコンポーネント（ナビゲーションとフッター）
+    app.config.ts          アプリの設定（ルーターなど）
+    app.routes.ts          ルーティング設定
+    main/                  トップページのコンポーネント
+    about/                 About ページのコンポーネント
+public/                    そのまま配信される静的ファイル（画像、favicon など）
+angular.json               Angular CLI の設定
+eslint.config.js           ESLint の設定
 ```
 
 ## ルーティング
 
-| パス | コントローラー | テンプレート |
-|---|---|---|
-| `/` | `MainCtrl` | `views/main.html` |
-| `/about` | `AboutCtrl` | `views/about.html` |
+| パス | コンポーネント |
+|---|---|
+| `/` | `Main` |
+| `/about` | `About` |
 
-上記以外のパスは `/` にリダイレクトします。
+URL は従来と同じ `#/about` のようなハッシュ形式です。上記以外のパスは `/` にリダイレクトします。
 
 ## セットアップ
 
 ```sh
 npm install
-bower install
 ```
 
-## ビルドと開発
+## 開発
 
 | コマンド | 内容 |
 |---|---|
-| `grunt` | Lint・テスト・ビルドをまとめて実行します |
-| `grunt build` | 本番用にビルドし、`dist/` に出力します |
-| `grunt serve` | 開発サーバーを起動します。ファイルを変更するとブラウザが自動で再読み込みされます |
-| `grunt serve:dist` | ビルドしたうえで `dist/` を配信してプレビューします |
+| `npm start` | 開発サーバーを起動します（http://localhost:4200 ）。ファイルを変更するとブラウザが自動で再読み込みされます |
+| `npm run build` | 本番用にビルドし、`dist/yeoman/browser/` に出力します |
+| `npm run watch` | 開発用の設定でビルドし続けます |
+| `npm test` | Vitest でユニットテストを実行します |
+| `npm run lint` | ESLint を実行します |
 
-## テスト
+## 移行前の構成との違い
 
-```sh
-npm test
-```
-
-Karma でユニットテストを実行します。
-
-`grunt test` でも実行できるように定義されていますが、Karma を Grunt から呼ぶための `grunt-karma` が `package.json` に入っていません。使う場合は別途インストールしてください（`grunt` の既定タスクも `test` を含むため同様です）。
-
-## 注意事項
-
-依存パッケージ（Grunt 0.4 系のプラグイン、Bower、PhantomJS など）が古いため、最近の Node.js ではインストールやビルドが失敗することがあります。
+- Grunt、Bower、Karma、PhantomJS、JSHint、JSCS は使わなくなりました。
+- AngularJS のコントローラーとビューは、Angular のコンポーネントに書き換えました。
+- Bootstrap 3 から 5 に上げました。`jumbotron` と `glyphicon` は Bootstrap 5 にないため、スタイルと文字で置き換えています。
+- 使われていなかった Google Analytics（ユニバーサル アナリティクス）のスニペットは削除しました。
