@@ -1,0 +1,15 @@
+<div class="jumbotron">
+  <h1>'Allo, 'Allo!</h1>
+  <p class="lead">
+    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
+    Always a pleasure scaffolding your apps.
+  </p>
+  <p><a class="btn btn-lg btn-success" routerLink="/">Splendid! <span aria-hidden="true">&check;</span></a></p>
+</div>
+
+<div class="row marketing">
+  @for (thing of awesomeThings; track thing.name) {
+    <h4>{{ thing.name }}</h4>
+    <p>{{ thing.description }}</p>
+  }
+</div>
