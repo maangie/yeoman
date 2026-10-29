@@ -7,11 +7,13 @@ Angular 22 で作られたシンプルなアプリケーションです。もと
 | 用途 | 使用技術 |
 |---|---|
 | フレームワーク | Angular 22（スタンドアロンコンポーネント、`@angular/router`） |
-| 言語 | TypeScript |
+| 言語 | TypeScript 6.0 |
 | スタイル | Bootstrap 5、SCSS |
 | ビルド・開発サーバー | Angular CLI（`@angular/build`） |
 | テスト | Vitest + jsdom |
 | Lint | ESLint（angular-eslint） |
+| CI・公開 | GitHub Actions、GitHub Pages |
+| 依存の更新 | Dependabot |
 
 ## 必要な環境
 
@@ -20,6 +22,9 @@ Node.js 22.22.3 以上、24.15.0 以上、または 26 以上（Angular CLI 22 �
 ## ディレクトリ構成
 
 ```
+.github/
+  workflows/deploy.yml     CI と GitHub Pages への公開
+  dependabot.yml           Dependabot の設定
 src/
   index.html               エントリーポイント
   main.ts                  アプリの起動処理
@@ -59,6 +64,27 @@ npm install
 | `npm run watch` | 開発用の設定でビルドし続けます |
 | `npm test` | Vitest でユニットテストを実行します |
 | `npm run lint` | ESLint を実行します |
+
+## CI と公開
+
+GitHub Actions のワークフロー `Build and Deploy`（`.github/workflows/deploy.yml`）で、lint・テスト・ビルドを実行します。
+
+| きっかけ | 内容 |
+|---|---|
+| `master` 向けの PR | lint・テスト・ビルドだけを実行します |
+| `master` への push | ビルドしたものを GitHub Pages に公開します |
+| 手動実行（`workflow_dispatch`） | `master` への push と同じです |
+
+公開先は https://maangie.github.io/yeoman/ です。
+
+`master` にはルールセットを設定していて、`build` ジョブが成功していない PR はマージできません。`master` への直接の push も、`build` が成功していないコミットは拒否されます。変更は PR から入れてください。
+
+## 依存の更新
+
+Dependabot が npm と GitHub Actions の依存を週に 1 回確認し、更新の PR を作ります。
+
+- `@angular/*` と `angular-eslint` は、バージョンをそろえるため 1 つの PR にまとめます。
+- TypeScript 7.0 系への更新は見送っています。Angular 22.2 が TypeScript 6.0 にしか対応していないためです。7.1 の正式版が出たら、Angular の対応を確かめて一緒に上げます。
 
 ## 移行前の構成との違い
 
