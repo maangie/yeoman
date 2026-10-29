@@ -9,6 +9,10 @@ updates:
         patterns:
           - '@angular/*'
           - 'angular-eslint'
+    ignore:
+      # TypeScript 7.0 系は見送り、7.1 の正式版が出てから上げる
+      - dependency-name: typescript
+        versions: ['>= 7.0.0, < 7.1.0']
   - package-ecosystem: github-actions
     directory: /
     schedule:
